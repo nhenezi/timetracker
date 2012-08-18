@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-simplex.css" />
+  <script type="text/template" id="template-sidebar-projects">
+    <li class="divider"></li>
+    <li class="nav-header">Projects</li>
+  </script>
+  <script type="text/template" id="template-sidebar-project">
+      <a href="#<%=client%>/<%=name%>"><%=name%></a>
+  </script>
+  <script type="text/teplate" id="template-sidebar-clients">
+    <li class="nav-header">
+      Clients
+    </li>
+  </script>
+  <script type="text/template" id="template-sidebar-client">
+      <a href="#<%=name%>"><%=name%></a>
+  </script>
+  <script type="text/template" id="template-task">
+  </script>
+</head>
+<body>
+<div class="container-fluid">
+  <section id="navbar">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container" style="width: auto;">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">TimeTracker</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Tasks</a></li>
+              <li><a href="#">Projects</a></li>
+              <li><a href="#">Clients</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="span2" id="sidebar">
+    <ul class="nav nav-list" id="sidebar-client">
+    </ul>
+    <ul class="nav nav-list" id="sidebar-project">
+    </ul>
+  </div>
+  <div class="span9">
+    <form class="well form-inline">
+      <input type="text" class="input-xlarge" placeholder="Add a new task...">
+      <button type="submit" class="btn">Add task</button>
+    </form>
+    <table id="tasks" class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Time</th>
+          <th>Client</th>
+          <th>Project</th>
+          <th>Per hour</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>1</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>2</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>3</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>4</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>5</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>6</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>7</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>8</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>9</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+        <tr>
+          <th>10</th>
+          <th>Band features</th>
+          <th>05:32:16</th>
+          <th>Giuseppe De Napoli</th>
+          <th>Waveloud</th>
+          <th>15.6$</th>
+          <th>500$</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script type="application/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="application/javascript" src="js/underscore.js"></script>
+<script type="application/javascript" src="js/backbone.js"></script>
+<script type="application/javascript" src="js/backbone_utils.js"></script>
+<script type="application/javascript" src="js/application.js"></script>
+</body>
