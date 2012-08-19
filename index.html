@@ -19,6 +19,11 @@
       <a href="#<%=name%>"><%=name%></a>
   </script>
   <script type="text/template" id="template-task">
+    <th><%=id%></th>
+    <th><%=name%></th>
+    <th><%=hours%></th>
+    <th><%=client%></th>
+    <th><%=project%></th>
   </script>
 </head>
 <body>
@@ -50,10 +55,28 @@
     <ul class="nav nav-list" id="sidebar-project">
     </ul>
   </div>
-  <div class="span9">
+  <div class="span9" id="newTask">
     <form class="well form-inline">
-      <input type="text" class="input-xlarge" placeholder="Add a new task...">
-      <button type="submit" class="btn">Add task</button>
+      <input type="text" class="input-xlarge" placeholder="Add a new task..." />
+      <button id="addTask" type="submit" class="btn">Add task</button>
+      <div>
+        Client:
+        <select id="select01">
+          <option>something</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        Project:
+        <select id="select01">
+          <option>something</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
     </form>
     <table id="tasks" class="table table-striped">
       <thead>
@@ -68,96 +91,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th>1</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>2</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>3</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>4</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>5</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>6</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>7</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>8</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>9</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
-        <tr>
-          <th>10</th>
-          <th>Band features</th>
-          <th>05:32:16</th>
-          <th>Giuseppe De Napoli</th>
-          <th>Waveloud</th>
-          <th>15.6$</th>
-          <th>500$</th>
-        </tr>
       </tbody>
     </table>
   </div>
@@ -165,6 +98,5 @@
 <script type="application/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="application/javascript" src="js/underscore.js"></script>
 <script type="application/javascript" src="js/backbone.js"></script>
-<script type="application/javascript" src="js/backbone_utils.js"></script>
 <script type="application/javascript" src="js/application.js"></script>
 </body>

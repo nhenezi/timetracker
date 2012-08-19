@@ -27,6 +27,7 @@ $(function() {
       start_date: null,
       deadline: null,
       time_spent: null,
+      client_id: null,
       price_id: {}
     }
   });
@@ -45,7 +46,7 @@ $(function() {
   //collections
   collection.Clients = Backbone.Collection.extend({
     model: model.Client,
-    active: null,
+    active: 0,
 
     url: function() {
       return "testdata/client.json";
@@ -54,7 +55,7 @@ $(function() {
 
   collection.Projects = Backbone.Collection.extend({
     model: model.Project,
-    active: null,
+    active: 0,
   });
 
   collection.Tasks = Backbone.Collection.extend({
@@ -121,7 +122,6 @@ $(function() {
       _.bindAll(this);
       $(this.el).attr("id", "nav-projects-" + this.model.get("name"));
       this.model.on("destroy", this.remove);
-
     },
 
     render: function() {
@@ -132,6 +132,15 @@ $(function() {
       }));
       return this.el;
     },
+
+    makeActive: function() {
+      collection.projects.active = this.model.get("id");
+      collection.projects.trigger("changeActiveProject");
+    },
+
+    events: {
+      "click": "makeActive"
+    }
   });
 
   view.ProjectsSideView = Backbone.View.extend({
@@ -167,7 +176,54 @@ $(function() {
   });
 
   view.TaskView = Backbone.View.extend({
-    el: "true"
+    tagName: "tr",
+    template: _.template($("#template-task").html()),
+    
+    initialize: function() {
+      _.bindAll(this);
+    },
+
+    render: function() {
+      var project = collection.projects.get(this.model.get("project_id"));
+      $(this.el).html(this.template({
+        id: this.model.get("id"),
+        name: this.model.get("name"),
+        hours: this.model.get("hours"),
+        client: collection.clients.get(project.get("client_id")).get("name"),
+        project: project.get("name")
+      }));
+      return this.el
+    }
+  });
+
+  view.TasksView = Backbone.View.extend({
+    el: "#tasks tbody",
+
+    initialize: function() {
+      _.bindAll(this);
+      collection.projects.on("changeActiveProject", this.updateTasks);
+      this.updateTasks();
+    },
+
+    updateTasks: function() {
+      collection.tasks.url = "testdata/project/" + collection.projects.active;
+      collection.tasks.fetch({
+        success: this.render
+      });
+    },
+
+    addTask: function(model) {
+      var tmp = new view.TaskView({model: model});
+      $(this.el).append(tmp.render());
+    },
+    
+    render: function() {
+      var that = this;
+      $(this.el).empty();
+      _.each(collection.tasks.models, function(model) {
+        that.addTask(model);
+      });
+    }
   });
 
 
@@ -183,7 +239,9 @@ $(function() {
           collection.projects.url = "testdata/client/0" //getall 
           collection.projects.fetch({ 
             success: _.bind(function(c, o) {
+              c.active = 0;
               this.ProjectsView = new view.ProjectsSideView({collection: c}).render();
+              collection.tasks.trigger("projectsLoad");
             }, this)
           })
         }, this),
@@ -195,17 +253,46 @@ $(function() {
     }
   });
 
+  view.topView = Backbone.View.extend({
+    el: "#newTask",
+
+    initialize: function() {
+      _.bindAll(this);
+    },
+
+    addTask: function(e) {
+      console.log(e);
+    },
+
+    showOptions: function() {
+      
+    },
+
+    events: {
+      "click #addTask": "addTask",
+      "focusin": "showOptions"
+    }
+  });
+
   view.Application = Backbone.View.extend({
     el: "body",
 
     initialize: function() {
       //initialize collections
-      collection.clients = new collection.Clients;
-      collection.tasks = new collection.Tasks;
+      collection.clients  = new collection.Clients;
+      collection.tasks    = new collection.Tasks;
       collection.projects = new collection.Projects;
 
       //create sideview
-      this.sideView = new view.SideView;
+      this.sideView  = new view.SideView;
+      this.topView   = new view.topView;
+
+      //when all client/project information is loaded, get tasks
+      collection.tasks.on("projectsLoad", this.getTasks);
+    },
+
+    getTasks: function() {
+      this.taskView = new view.TasksView;
     }
   });
 
