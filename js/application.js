@@ -11,6 +11,7 @@ $(function() {
   var collection = timetracker.collection;
   var view = timetracker.view;
   var routes = timetracker.routes;
+  var app = null;
 
   //models
   model.Client = Backbone.Model.extend({
@@ -230,13 +231,25 @@ $(function() {
   view.SideView = Backbone.View.extend({
     el: "sidebar",
 
-    initialize: function() {
+    initialize: function(client, project) {
       _.bindAll(this)
 
       collection.clients.fetch({
         success: _.bind(function(c, o) {
           this.ClientsView = new view.ClientsSideView({collection: c}).render();
-          collection.projects.url = "testdata/client/0" //getall 
+          //if client is defined, get its id
+          if (client) {
+            client = _.filter(c.models, function(model) {
+              return client === model.get("name");
+            })[0];
+          }
+          else {
+            client = 0;//get all
+          }
+
+          var id = client && client.get("id");
+          collection.projects.url = "testdata/client/" + id;
+          collection.projects.trigger("clientsLoad");
           collection.projects.fetch({ 
             success: _.bind(function(c, o) {
               c.active = 0;
@@ -253,11 +266,46 @@ $(function() {
     }
   });
 
+  view.clientSelect = Backbone.View.extend({
+    el: "#select-client",
+
+    initialize: function(client, project) {
+      _.bindAll(this);
+      collection.clients.on("sync", this.render);
+    },
+
+    render: function() {
+      var that = this;
+      _.each(collection.clients.models, function(model) {
+        $(that.el).append("<option>" + model.get("name") + "</option>");
+      });
+    },
+
+    loadProject: function() {
+      console.log("changed");
+    },
+
+    events: {
+      "change": "loadProject"
+    }
+  });
+
+
   view.topView = Backbone.View.extend({
     el: "#newTask",
 
     initialize: function() {
       _.bindAll(this);
+      this.select = {
+        client: new view.clientSelect,
+        project: undefined
+      };
+      $(this.el).find("#options").hide();
+      //collection.clients.on("sync", this.ss);
+    },
+
+    ss: function(c,o) {
+      console.log(c, o);
     },
 
     addTask: function(e) {
@@ -265,7 +313,7 @@ $(function() {
     },
 
     showOptions: function() {
-      
+      $(this.el).find("#options").slideDown(100);
     },
 
     events: {
@@ -277,14 +325,17 @@ $(function() {
   view.Application = Backbone.View.extend({
     el: "body",
 
-    initialize: function() {
+    initialize: function(client, project) {
+      _.bindAll(this);
+      //default values
+      this.client = client || null;
+      this.project = project || null;
       //initialize collections
       collection.clients  = new collection.Clients;
       collection.tasks    = new collection.Tasks;
       collection.projects = new collection.Projects;
-
       //create sideview
-      this.sideView  = new view.SideView;
+      this.sideView  = new view.SideView(client, project);
       this.topView   = new view.topView;
 
       //when all client/project information is loaded, get tasks
@@ -298,12 +349,16 @@ $(function() {
 
   routes.dummy = Backbone.Router.extend({
     routes: {
-      "": "index",
-      ":client": "navigation",
+      "": "generate",
+      ":client": "generate",
       ":client/:project": "navigation"
     },
     
-    generate: function() {
+    generate: function(client) {
+      var cl;
+      if (!app) {
+        app = new view.Application(client);
+      }
     },
 
     navigation: function(client, project) {
@@ -318,9 +373,6 @@ $(function() {
     }
   });
 
-//  route = new routes.dummy;
-//  Backbone.history.start();
-
-
-  new view.Application
+  route = new routes.dummy;
+  Backbone.history.start();
 });

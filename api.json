@@ -1,0 +1,4 @@
+GET 
+/projects/c/:cid // projects where client_id is cid
+/tasks/c/:cid    // tasks where client_id is cid
+/tasks/p/:pid    // tasks where project_id is pid
