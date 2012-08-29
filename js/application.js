@@ -6,14 +6,14 @@ $(function() {
     routes: {}
   }
 
-  //shortcuts
+  // shortcuts
   var model = timetracker.model;
   var collection = timetracker.collection;
-  var view = timetracker.view;
+  var view = timetracker.view
   var routes = timetracker.routes;
   var app = null;
 
-  //models
+  // models
   model.Client = Backbone.Model.extend({
     defaults: {
       id: null,
@@ -44,7 +44,7 @@ $(function() {
     }
   });
 
-  //collections
+  // collections
   collection.Clients = Backbone.Collection.extend({
     model: model.Client,
     active: 0,
@@ -64,19 +64,21 @@ $(function() {
   });
 
 
-  //views
+  // views
+
+  // responsile for rendering one client in sidebar
   view.ClientSideView = Backbone.View.extend({
     tagName: "li",
     template: _.template($("#template-sidebar-client").html()),
     
     initialize: function() {
       _.bindAll(this);
-      $(this.el).attr("id", "nav-clients-" + this.model.get("name"));
+      this.$el.attr("id", "nav-clients-" + this.model.get("name"));
       this.model.on("destroy", this.remove)
     },
 
     render: function() {
-      $(this.el).html(this.template({
+      this.$el.html(this.template({
         name: this.model.get("name")
       }));
       return this.el;
@@ -92,6 +94,7 @@ $(function() {
     }
   });
 
+  // responsible for rendering collection of clients in sidebar
   view.ClientsSideView = Backbone.View.extend({
     el: "#sidebar-client",
     template: _.template($("#template-sidebar-clients").html()),
@@ -102,12 +105,12 @@ $(function() {
     },
 
     addLink: function(model) { 
-      tmp = new view.ClientSideView({model: model});
-      $(this.el).append(tmp.render())
+      var tmp = new view.ClientSideView({model: model});
+      this.$el.append(tmp.render())
     },
 
     render: function() {
-      $(this.el).html(this.template());
+      this.$el.html(this.template());
       _.each(this.collection.models, function(model) {
         this.addLink(model);
       }, this);
@@ -115,19 +118,20 @@ $(function() {
     },
   });
 
+  // responsible for rendering one project link in sidebar
   view.ProjectSideView = Backbone.View.extend({
     tagName: "li",
     template: _.template($("#template-sidebar-project").html()),
     
     initialize: function() {
       _.bindAll(this);
-      $(this.el).attr("id", "nav-projects-" + this.model.get("name"));
+      this.$el.attr("id", "nav-projects-" + this.model.get("name"));
       this.model.on("destroy", this.remove);
     },
 
     render: function() {
       var client = collection.clients.get(this.model.get("client_id"));
-      $(this.el).html(this.template({
+      this.$el.html(this.template({
         name: this.model.get("name"),
         client: client.get("name")
       }));
@@ -144,6 +148,7 @@ $(function() {
     }
   });
 
+  // responsible for rendering collection of projects
   view.ProjectsSideView = Backbone.View.extend({
     el: "#sidebar-project",
     template: _.template($("#template-sidebar-projects").html()),
@@ -155,7 +160,8 @@ $(function() {
     },
 
     updateProjects: function() {
-      collection.projects.url = "testdata/client/" + collection.clients.active
+      collection.projects.url = "testdata/projects/c/" + collection.clients.active
+      //@ADD make sure to dispose extra project views
       collection.projects.fetch({
         success: this.render
       });
@@ -163,12 +169,12 @@ $(function() {
 
     addLink: function(model, path) {
       tmp = new view.ProjectSideView({model: model});
-      $(this.el).append(tmp.render())
+      this.$el.append(tmp.render())
     },
 
     render: function(path) {
-      $(this.el).empty();
-      $(this.el).html(this.template({path: path}));
+      this.$el.empty();
+      this.$el.html(this.template({path: path}));
       _.each(this.collection.models, function(model) {
         this.addLink(model, path);
       }, this);
@@ -176,6 +182,7 @@ $(function() {
     }
   });
 
+  // responsible for rendering single task
   view.TaskView = Backbone.View.extend({
     tagName: "tr",
     template: _.template($("#template-task").html()),
@@ -186,7 +193,7 @@ $(function() {
 
     render: function() {
       var project = collection.projects.get(this.model.get("project_id"));
-      $(this.el).html(this.template({
+      this.$el.html(this.template({
         id: this.model.get("id"),
         name: this.model.get("name"),
         hours: this.model.get("hours"),
@@ -197,6 +204,7 @@ $(function() {
     }
   });
 
+  // responsible for rendering collection of tasks
   view.TasksView = Backbone.View.extend({
     el: "#tasks tbody",
 
@@ -207,7 +215,7 @@ $(function() {
     },
 
     updateTasks: function() {
-      collection.tasks.url = "testdata/project/" + collection.projects.active;
+      collection.tasks.url = "testdata/tasks/p/" + collection.projects.active;
       collection.tasks.fetch({
         success: this.render
       });
@@ -215,18 +223,17 @@ $(function() {
 
     addTask: function(model) {
       var tmp = new view.TaskView({model: model});
-      $(this.el).append(tmp.render());
+      this.$el.append(tmp.render());
     },
     
     render: function() {
       var that = this;
-      $(this.el).empty();
+      this.$el.empty();
       _.each(collection.tasks.models, function(model) {
         that.addTask(model);
       });
     }
   });
-
 
   view.SideView = Backbone.View.extend({
     el: "sidebar",
@@ -248,7 +255,7 @@ $(function() {
           }
 
           var id = client && client.get("id");
-          collection.projects.url = "testdata/client/" + id;
+          collection.projects.url = "testdata/projects/c/" + id;
           collection.projects.trigger("clientsLoad");
           collection.projects.fetch({ 
             success: _.bind(function(c, o) {
@@ -300,7 +307,7 @@ $(function() {
         client: new view.clientSelect,
         project: undefined
       };
-      $(this.el).find("#options").hide();
+      this.$el.find("#options").hide();
       //collection.clients.on("sync", this.ss);
     },
 
@@ -313,7 +320,7 @@ $(function() {
     },
 
     showOptions: function() {
-      $(this.el).find("#options").slideDown(100);
+      this.$el.find("#options").slideDown(100);
     },
 
     events: {
