@@ -9,7 +9,7 @@ $(function() {
   // shortcuts
   var model = timetracker.model;
   var collection = timetracker.collection;
-  var view = timetracker.view
+  var view = timetracker.view;
   var routes = timetracker.routes;
   var app = null;
 
@@ -17,7 +17,7 @@ $(function() {
   model.Client = Backbone.Model.extend({
     defaults: {
       id: null,
-      name: null,
+      name: null
     }
   });
 
@@ -56,7 +56,7 @@ $(function() {
 
   collection.Projects = Backbone.Collection.extend({
     model: model.Project,
-    active: 0,
+    active: 0
   });
 
   collection.Tasks = Backbone.Collection.extend({
@@ -74,7 +74,7 @@ $(function() {
     initialize: function() {
       _.bindAll(this);
       this.$el.attr("id", "nav-clients-" + this.model.get("name"));
-      this.model.on("destroy", this.remove)
+      this.model.on("destroy", this.remove);
     },
 
     render: function() {
@@ -106,7 +106,7 @@ $(function() {
 
     addLink: function(model) { 
       var tmp = new view.ClientSideView({model: model});
-      this.$el.append(tmp.render())
+      this.$el.append(tmp.render());
     },
 
     render: function() {
@@ -200,7 +200,7 @@ $(function() {
         client: collection.clients.get(project.get("client_id")).get("name"),
         project: project.get("name")
       }));
-      return this.el
+      return this.el;
     }
   });
 
@@ -262,8 +262,8 @@ $(function() {
               c.active = 0;
               this.ProjectsView = new view.ProjectsSideView({collection: c}).render();
               collection.tasks.trigger("projectsLoad");
-            }, this)
-          })
+            }, this);
+          });
         }, this),
     
         error: function(c, r) {
