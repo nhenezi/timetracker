@@ -262,7 +262,7 @@ $(function() {
               c.active = 0;
               this.ProjectsView = new view.ProjectsSideView({collection: c}).render();
               collection.tasks.trigger("projectsLoad");
-            }, this);
+            }, this),
           });
         }, this),
     
